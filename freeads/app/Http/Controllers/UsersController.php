@@ -54,7 +54,7 @@ class UsersController extends Controller
         ]);
         }
         else{
-            return redirect('home')->with('error','You cannot preform this action');
+            return redirect('annonce')->with('error','You cannot preform this action');
         }
     }
 
@@ -73,7 +73,7 @@ class UsersController extends Controller
             ]);
         }
         else {
-            return redirect('/home')->with('error', 'You are not authorized !');
+            return redirect('annonce')->with('error', 'You are not authorized !');
         }
     }
 
@@ -113,7 +113,7 @@ class UsersController extends Controller
             return redirect(route('profile.show', ['id' => $id]));
         }
         else{
-            return redirect('home')->with('error','You cannot preform this action');
+            return redirect('annonce')->with('error','You cannot preform this action');
         }
     }
 
@@ -128,7 +128,7 @@ class UsersController extends Controller
         if(\Auth::id() == $id){
             $user = User::find($id);
             $user->delete();
-            return redirect('home')->with('success', 'Your account has been deleted');
+            return redirect('annonce')->with('success', 'Your account has been deleted');
         }
         
     }

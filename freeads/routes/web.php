@@ -18,11 +18,17 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'IndexController@showIndex')->name('home');
+
+
 Route::get('/profile/{id}', 'UsersController@show')->name('profile.show');
 Route::get('/profile/{id}/edit', 'UsersController@edit')->name('profile.edit');
 Route::post('/profile/{id}/update', 'UsersController@update')->name('profile.update');
 Route::get('/profile/{id}/destroy', 'UsersController@destroy')->name('profile.destroy');
 
+
+Route::get('/annonce', 'AnnonceController@index')->name('annonce');
+Route::get('/annonce/new', 'AnnonceController@create')->name('annonce.new');
+Route::post('/annonce/new', 'AnnonceController@store')->name('annonce.store');
 
 
 Route::get("/confirm/{id}/{verifyToken}", 'Auth\RegisterController@confirm');
