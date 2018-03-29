@@ -23,6 +23,8 @@
                         <a role='button' href='{{route('annonce.show', $ad->id)}}' type="button" class="btn btn-sm btn-outline-secondary">View</h5></a>
                         @if(Auth::user()->id == $ad->user->id)
                             <a role='button' href='{{route('annonce.edit', $ad->id)}}' type="button" class="btn btn-sm btn-outline-secondary">Edit</a>
+                            <a role='button' href='{{route('annonce.destroy', $ad->id)}}' type="button" class="btn btn-sm btn-outline-secondary">Delete</a>                                
+                            
                         @endif
                         </div>
                         <small class="text-muted">{{ $ad->user->username}}</small>

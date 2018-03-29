@@ -47,8 +47,6 @@ class AnnonceController extends Controller
             'title' => 'required|min:2|max:50',
             'content' => 'required|max:255',
             'prix' => 'required|integer',
-            // 'images' => 'array',
-            // 'images.*' => 'image',
         ]);
     
 //            dd($request->all());
@@ -97,9 +95,13 @@ class AnnonceController extends Controller
      * @param  \App\Annonce  $annonce
      * @return \Illuminate\Http\Response
      */
-    public function edit(Annonce $annonce)
+    public function edit($id)
     {
-        //
+        $annonce = Annonce::find($id);
+
+        return view('annonce.edit', [
+            'annonce' => $annonce
+        ]);
     }
 
     /**
@@ -109,9 +111,36 @@ class AnnonceController extends Controller
      * @param  \App\Annonce  $annonce
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Annonce $annonce)
+    public function update(Request $request, $id)
     {
-        //
+        $this->validate(request(), [
+            'title' => 'required|min:2|max:50',
+            'content' => 'required|max:255',
+            'prix' => 'required|integer',
+        ]);
+
+        $annonce = Annonce::find($id);
+        $annonce->title = $request->title;
+        $annonce->prix = $request->prix;
+        $annonce->content = $request->content;
+        $annonce->update();
+
+        if(isset($request->images)){
+            foreach ($request->images as $image) {
+                if ($image->isValid()) {
+    
+                    $filename = time() . '.' . $image . $image->getClientOriginalExtension();
+                    $image->storeAs('images', $filename, 'public');
+    
+                    $annonce->publishImages(new Image([
+                        'filename' => 'storage/images/'.$filename,
+                    ]));
+    
+                }
+            }
+        }
+
+        return back();
     }
 
     /**
@@ -120,8 +149,11 @@ class AnnonceController extends Controller
      * @param  \App\Annonce  $annonce
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Annonce $annonce)
+    public function destroy($id)
     {
-        //
+        $annonce = Annonce::find($id);
+        $annonce->delete();
+
+        return redirect('annonce');
     }
 }

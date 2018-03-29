@@ -37,5 +37,5 @@ Route::prefix('annonce')->group(function(){
     Route::get('/{id}/destroy', 'AnnonceController@destroy')->name('annonce.destroy');
 });
 
-
+Route::get('/image/{id}/delete', 'ImageController@destroy')->name('image.destroy');
 Route::get("/confirm/{id}/{verifyToken}", 'Auth\RegisterController@confirm');
