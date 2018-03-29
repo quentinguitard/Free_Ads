@@ -10,7 +10,7 @@
                 <div class="card-header">{{ __('Publier une Annonce') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('annonce.store') }}">
+                    <form method="POST" action="{{ route('annonce.store') }}" enctype="multipart/form-data">
                         @csrf
 
                         <div class="form-group row">
@@ -46,10 +46,17 @@
 
                             <div class="col-md-6">
                                 <textarea id="content" class="form-control{{ $errors->has('content') ? ' is-invalid' : '' }}" name="content" required></textarea>
-
                                 @if ($errors->has('content'))
+                                <span class="invalid-feedback">
+                                    <strong>{{ $errors->first('content') }}</strong>
+                                </span>
+                                @endif
+
+                                <input type="file" name="images[]" multiple />
+
+                                @if ($errors->has('images'))
                                     <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('content') }}</strong>
+                                        <strong>{{ $errors->first('images') }}</strong>
                                     </span>
                                 @endif
                             </div>

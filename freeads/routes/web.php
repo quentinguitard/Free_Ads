@@ -19,16 +19,23 @@ Auth::routes();
 
 Route::get('/home', 'IndexController@showIndex')->name('home');
 
+Route::prefix('profile')->group(function(){
+    Route::get('/{id}', 'UsersController@show')->name('profile.show');
+    Route::get('/{id}/edit', 'UsersController@edit')->name('profile.edit');
+    Route::post('/{id}/update', 'UsersController@update')->name('profile.update');
+    Route::get('/{id}/destroy', 'UsersController@destroy')->name('profile.destroy');
+});
 
-Route::get('/profile/{id}', 'UsersController@show')->name('profile.show');
-Route::get('/profile/{id}/edit', 'UsersController@edit')->name('profile.edit');
-Route::post('/profile/{id}/update', 'UsersController@update')->name('profile.update');
-Route::get('/profile/{id}/destroy', 'UsersController@destroy')->name('profile.destroy');
 
-
-Route::get('/annonce', 'AnnonceController@index')->name('annonce');
-Route::get('/annonce/new', 'AnnonceController@create')->name('annonce.new');
-Route::post('/annonce/new', 'AnnonceController@store')->name('annonce.store');
+Route::prefix('annonce')->group(function(){
+    Route::get('/', 'AnnonceController@index')->name('annonce');
+    Route::get('/new', 'AnnonceController@create')->name('annonce.new');
+    Route::post('/new', 'AnnonceController@store')->name('annonce.store');
+    Route::get('/{id}', 'AnnonceController@show')->name('annonce.show');
+    Route::get('/{id}/edit', 'AnnonceController@edit')->name('annonce.edit');
+    Route::post('/{id}/update', 'AnnonceController@update')->name('annonce.update');
+    Route::get('/{id}/destroy', 'AnnonceController@destroy')->name('annonce.destroy');
+});
 
 
 Route::get("/confirm/{id}/{verifyToken}", 'Auth\RegisterController@confirm');

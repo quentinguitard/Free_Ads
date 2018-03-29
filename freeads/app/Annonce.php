@@ -12,5 +12,14 @@ class Annonce extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function image()
+    {
+        return $this->hasMany(Image::class);
+    }
+
+    public function publishImages(Image $image)
+    {
+        return $this->image()->save($image);
+    }
 
 }

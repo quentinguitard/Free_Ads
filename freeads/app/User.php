@@ -29,10 +29,11 @@ class User extends Authenticatable
 
     public function annonce()
     {
-        return $this->hasMany(Ticket::class);
+        return $this->hasMany(Annonce::class);
     }
-    public function publishTicket(Annonce $annonce)
+    public function publishAnnonce(Annonce $annonce)
     {
-        $this->annonce()->save($annonce);
+        return $this->annonce()->save($annonce);
+        
     }
 }

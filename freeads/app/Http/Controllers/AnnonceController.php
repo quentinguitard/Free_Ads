@@ -3,10 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Annonce;
+use App\User;
+use App\Image;
 use Illuminate\Http\Request;
 
 class AnnonceController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth')->except('index');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -34,19 +41,37 @@ class AnnonceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Annonce $annonce)
     {
         $this->validate(request(), [
-            'title' => 'required|min:2',
-            'content' => 'required',
-            'prix' => 'required|integer'
+            'title' => 'required|min:2|max:50',
+            'content' => 'required|max:255',
+            'prix' => 'required|integer',
+            // 'images' => 'array',
+            // 'images.*' => 'image',
         ]);
     
-        auth()->user()->publishAnnonce(new Annonce([
+//            dd($request->all());
+            
+        $annonce = auth()->user()->publishAnnonce(new Annonce([
             'title'=> $request->title,
             'content' => $request->content,
             'prix' => $request->prix,
-        ]));
+        ]));     
+        if(isset($request->images)){
+            foreach ($request->images as $image) {
+                if ($image->isValid()) {
+    
+                    $filename = time() . '.' . $image->getClientOriginalExtension();
+                    $image->storeAs('images', $filename, 'public');
+    
+                    $annonce->publishImages(new Image([
+                        'filename' => 'storage/images/'.$filename,
+                    ]));
+    
+                }
+            }
+        }
 
         return redirect('annonce');
     }
@@ -57,9 +82,13 @@ class AnnonceController extends Controller
      * @param  \App\Annonce  $annonce
      * @return \Illuminate\Http\Response
      */
-    public function show(Annonce $annonce)
+    public function show($id)
     {
-        //
+        $annonce = Annonce::find($id);
+
+        return view('annonce.show', [
+            'annonce' => $annonce
+        ]);
     }
 
     /**
