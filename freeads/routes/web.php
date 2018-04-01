@@ -35,7 +35,12 @@ Route::prefix('annonce')->group(function(){
     Route::get('/{id}/edit', 'AnnonceController@edit')->name('annonce.edit');
     Route::post('/{id}/update', 'AnnonceController@update')->name('annonce.update');
     Route::get('/{id}/destroy', 'AnnonceController@destroy')->name('annonce.destroy');
+    Route::post('/search', 'AnnonceController@filterSearch')->name('annonce.filter');
 });
+
+Route::get('/message/box', 'MessageController@index')->name('message.box');
+Route::get('/message/new', 'MessageController@create')->name('message.new');
+Route::post('/message/send', 'MessageController@store')->name('message.post');
 
 Route::get('/image/{id}/delete', 'ImageController@destroy')->name('image.destroy');
 Route::get("/confirm/{id}/{verifyToken}", 'Auth\RegisterController@confirm');

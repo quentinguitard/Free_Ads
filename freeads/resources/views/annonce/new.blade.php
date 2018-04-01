@@ -61,6 +61,20 @@
                                 @endif
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label for="category" class="col-md-4 col-form-label text-md-right">{{ __('Choisir une catégorie') }}</label>
+                            <div class="col-md-6">
+
+                                <select class="custom-select" name='category'>
+                                    <option selected>{{ __('Choisir une catégorie') }}</option>
+                                    <option value="gardien">Gardien</option>
+                                    <option value="defenseur">Defenseur</option>
+                                    <option value="milieu">Milieu</option>
+                                    <option value="attaquant">Attaquant</option>
+                                </select>
+
+                            </div>
+                        </div>
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">

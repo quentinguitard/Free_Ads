@@ -49,13 +49,20 @@ class AnnonceController extends Controller
             'prix' => 'required|integer',
         ]);
     
-//            dd($request->all());
-            
+//            dd($request->all())
+
+
+        if($request->category == 'Choisir une catégorie'){
+            $request->category = null;
+        };
+                    
         $annonce = auth()->user()->publishAnnonce(new Annonce([
             'title'=> $request->title,
             'content' => $request->content,
             'prix' => $request->prix,
+            'category' => $request->category,
         ]));     
+
         if(isset($request->images)){
             foreach ($request->images as $image) {
                 if ($image->isValid()) {
@@ -70,8 +77,7 @@ class AnnonceController extends Controller
                 }
             }
         }
-
-        return redirect('annonce');
+        return redirect('annonce')->with('success', 'Votre annonce a bien été crée');
     }
 
     /**
@@ -99,9 +105,15 @@ class AnnonceController extends Controller
     {
         $annonce = Annonce::find($id);
 
-        return view('annonce.edit', [
-            'annonce' => $annonce
-        ]);
+        if(\Auth::user()->id == $annonce->user->id){
+
+            return view('annonce.edit', [
+                'annonce' => $annonce
+            ]);
+        }        
+        else {
+            return redirect('annonce')->with('error', 'You are not authorized !');
+        }
     }
 
     /**
@@ -119,28 +131,37 @@ class AnnonceController extends Controller
             'prix' => 'required|integer',
         ]);
 
+        if($request->category == 'Choisir une catégorie'){
+            $request->category = null;
+        }
         $annonce = Annonce::find($id);
-        $annonce->title = $request->title;
-        $annonce->prix = $request->prix;
-        $annonce->content = $request->content;
-        $annonce->update();
-
-        if(isset($request->images)){
-            foreach ($request->images as $image) {
-                if ($image->isValid()) {
+        if(\Auth::user()->id == $annonce->user->id){
+            $annonce->title = $request->title;
+            $annonce->prix = $request->prix;
+            $annonce->content = $request->content;
+            $annonce->category = $request->category;
+            $annonce->update();
     
-                    $filename = time() . '.' . $image . $image->getClientOriginalExtension();
-                    $image->storeAs('images', $filename, 'public');
-    
-                    $annonce->publishImages(new Image([
-                        'filename' => 'storage/images/'.$filename,
-                    ]));
-    
+            if(isset($request->images)){
+                foreach ($request->images as $image) {
+                    if ($image->isValid()) {
+        
+                        $filename = time() . '.' . $image . $image->getClientOriginalExtension();
+                        $image->storeAs('images', $filename, 'public');
+        
+                        $annonce->publishImages(new Image([
+                            'filename' => 'storage/images/'.$filename,
+                        ]));
+        
+                    }
                 }
             }
+    
+            return redirect("annonce/{$id}")->with('success', 'Votre annonce a été mise a jour');
         }
-
-        return back();
+        else {
+            return redirect('annonce')->with('error', 'You are not authorized !');
+        }
     }
 
     /**
@@ -152,8 +173,33 @@ class AnnonceController extends Controller
     public function destroy($id)
     {
         $annonce = Annonce::find($id);
-        $annonce->delete();
+        if(\Auth::user()->id == $annonce->user->id){
+            $annonce->delete();
 
-        return redirect('annonce');
+            return redirect('annonce')->with('success', 'Votre annonce a été supprimer');
+        }
+        else {
+            return redirect('annonce')->with('error', 'You are not authorized !');
+        }
+
+    }
+
+    public function filterSearch(Request $request)
+    {
+        if($request->category == 'Choisir une catégorie'){
+            //$request->category = null;
+            $annonce = Annonce::latest()
+            ->where('title', 'LIKE', $request->title)
+            ->paginate(9);
+        }else {
+            $annonce = Annonce::latest()
+            ->where('title', 'LIKE', $request->title)
+            ->where('category', 'LIKE', $request->category)
+            ->paginate(9);
+        }
+
+        //dd($annonce);
+        return view('annonce.index', compact('annonce'));
+        
     }
 }

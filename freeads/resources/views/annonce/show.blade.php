@@ -8,7 +8,7 @@
             @foreach($annonce->image as $image)
             <div class="col-3">
 
-                <img class="card-img-top" src="../{{ $image->filename }}" alt="" max-height='300px'>
+                <img class="card-img-top" src="/{{ $image->filename }}" alt="" max-height='300px'>
             </div>
             @endforeach
         </div>

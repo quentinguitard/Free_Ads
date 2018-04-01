@@ -53,7 +53,7 @@
                             <label for="content" class="col-md-4 col-form-label text-md-right">{{ __('Description de l\'annonce') }}</label>
 
                             <div class="col-md-6">
-                                <textarea id="content" class="form-control{{ $errors->has('content') ? ' is-invalid' : '' }}" name="content" required>{{$annonce->content}}'</textarea>
+                                <textarea id="content" class="form-control{{ $errors->has('content') ? ' is-invalid' : '' }}" name="content" required>{{$annonce->content}}</textarea>
                                 @if ($errors->has('content'))
                                 <span class="invalid-feedback">
                                     <strong>{{ $errors->first('content') }}</strong>
@@ -69,6 +69,23 @@
                                 @endif
                             </div>
                         </div>
+
+                        <div class="form-group row">
+                                <label for="category" class="col-md-4 col-form-label text-md-right">{{ __('Choisir une catégorie') }}</label>
+                                <div class="col-md-6">
+                                    <select class="custom-select" name='category'>
+                                        @if(isset($annonce->category))
+                                        <option selected>{{ $annonce->category }}</option>
+                                        @else
+                                        <option selected>{{ __('Choisir une catégorie') }}</option>
+                                        @endif
+                                        <option value="gardien">Gardien</option>
+                                        <option value="defenseur">Defenseur</option>
+                                        <option value="milieu">Milieu</option>
+                                        <option value="attaquant">Attaquant</option>
+                                    </select>
+                                </div>
+                            </div>
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
