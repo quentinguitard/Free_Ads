@@ -1,5 +1,5 @@
 # freeAds
-Laravel 5.6 oriented project.
+School project : Laravel 5.6 oriented project.
 
 This Project was PHP oriented done with Laravel 5.6 it has the following features :
 
